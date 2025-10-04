@@ -1,0 +1,292 @@
+<!--
+Simple single-file starter blog for GitHub Pages
+Filename: index.html
+
+How to use:
+1. Create a new GitHub repo (public) called username.github.io (replace username).
+2. Add this file as `index.html` to the repo root and push to GitHub.
+3. GitHub Pages will serve it at https://username.github.io
+
+How to add posts:
+- This starter keeps posts in the `posts` array inside the <script> at the bottom.
+- Add objects with {id, title, date, tags, excerpt, content, cover}.
+- Or replace with a simple Markdown loader in the future.
+
+Features:
+- Responsive layout (header, hero, posts grid, projects, about, contact)
+- Light/dark toggle (client-side)
+- Client-side search and tag-filtering
+- Add posts and projects directly in JS (easy for GitHub Pages static hosting)
+
+Customize:
+- Replace name, intro text, and sample posts.
+- Update styles in the <style> block to match your branding.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Tech & Product Journey</title>
+  <meta name="description" content="Hii! Welcome to my personal blog about all things possibly tech and product. This blog is a little resource to help people who aspire to go into tech or product. I share my own projects, ideas, reflections, code, and internship/job openings! So stay tuned!" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+  <!-- Simple, modern CSS in-file -->
+  <style>
+    :root{
+      --bg:#9cafe8; --card:#f5f5f9; --muted:#010f27; --accent:#6b63ff; --glass: rgba(255,255,255,0.6);
+    }
+    [data-theme='dark']{ --bg:#0b0c10; --card:#0f1115; --muted:#9aa0a6; --accent:#8b82ff; --glass: rgba(255,255,255,0.04);} 
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, 'Lucida Console', Arial;
+      background:linear-gradient(180deg,var(--bg),#e9eefb); color:var(--muted); -webkit-font-smoothing:antialiased; padding:24px;
+    }
+    .container{max-width:1000px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#acbdf5);display:flex;align-items:center;justify-content:center;color:rgb(27, 24, 92);font-weight:700}
+    h1{margin:0;color:inherit}
+    nav{display:flex;gap:12px}
+    a{color:var(--muted);text-decoration:none}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:var(--card);box-shadow:0 6px 18px rgba(25,25,50,0.06);color:var(--muted);cursor:pointer}
+
+    .hero{display:grid;grid-template-columns:1fr;gap:18px;margin-bottom:24px;background:var(--card);padding:22px;border-radius:14px;box-shadow:0 6px 30px rgba(15,15,30,0.04)}
+    .hero h2{color:inherit;margin:0}
+    .meta{color:var(--muted);font-size:14px}
+
+    .controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .search{flex:1;min-width:180px}
+    input[type='search'], input[type='text']{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent;color:inherit}
+
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(20,20,40,0.04);color:inherit}
+    .card h3{margin:0 0 8px 0;color:inherit}
+    .card p{margin:0 0 10px 0;color:var(--muted)}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{font-size:12px;padding:6px 8px;border-radius:999px;background:var(--glass);color:var(--muted)}
+
+    footer{margin-top:30px;text-align:center;color:var(--muted);font-size:14px}
+
+    @media (max-width:800px){
+      .grid{grid-template-columns:1fr}
+      header{flex-direction:column;align-items:flex-start;gap:12px}
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">ED</div>
+        <div>
+          <div style="font-size:14px;color:var(--muted)">ElisaUncoded — Product & Tech</div>
+          <h1>My Tech & Product Journey</h1>
+        </div>
+      </div>
+      <nav>
+        <button class="btn" id="themeToggle">Main</button>
+        <a class="btn" href="#about">About</a>
+        <a class="btn" href="#projects">Projects</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h2>Design. Build. Learn.</h2>
+        <p class="meta">Hii! Welcome to my personal blog about all things possibly tech and product. This blog is a little resource to help people who aspire to go into tech or product. 
+            I share my own projects, ideas, reflections, code, and internship/job openings! So stay tuned!</p>
+      </div>
+      <div style="display:flex;gap:12px">
+        <a class="btn" href="#posts">Read posts</a>
+        <a class="btn" href="#contact">Get in touch</a>
+      </div>
+    </section>
+
+    <div class="controls">
+      <div class="search">
+        <input type="search" id="search" placeholder="Search posts or tags...">
+      </div>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="tagFilter" placeholder="Filter by tag (e.g. product)">
+        <button class="btn" id="clearFilters">Clear</button>
+      </div>
+    </div>
+
+    <main>
+      <section id="posts">
+        <h2 style="margin-top:0">Latest posts</h2>
+        <div id="postsGrid" class="grid"></div>
+      </section>
+
+      <section id="projects" style="margin-top:28px">
+        <h2 style="display:flex;align-items:center;gap:8px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="color:var(--accent)">
+            <path d="M21 7h-6V3H9v4H3v14h18V7zM11 5h2v2h-2V5zm8 14H5V9h14v10z"/>
+            </svg>
+            Projects
+            </h2>
+            <div id="projectsGrid" class="grid"></div>
+      </section>
+
+      <section id="about" style="margin-top:28px">
+        <h2>About me</h2>
+            <h2 style="display:flex;align-items:center;gap:8px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="color:var(--accent)">
+                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8V22h19.2v-2.8c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+            About me
+        </h2>
+        <div class="card">
+            <p>Hi — I'm Elisa. I'm currently diving into learning about product design and software. I love getting to hear feedback, iterating fast, and connecting design to real user problems. This blog documents my progress as I work through different scopes projects</p>
+        </div>
+      </section>
+
+      <section id="contact" style="margin-top:28px">
+        <h2>Contact</h2>
+        <div class="card" style="display:flex;align-items:center;gap:12px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="flex-shrink:0;color:var(--accent)">
+            <path d="M2 4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4zm2 0v.01L12 13l8-8.99V4H4zm0 2.414V20h16V6.414l-8 8-8-8z"/>
+            </svg>
+          <p>Want to collaborate, share feedback, or ask about internships? Email: <a href="mailto:your.email@example.com">elisadsa1@gmail.com</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Built with ❤️ — deploy on GitHub Pages by pushing this file to username.github.io
+    </footer>
+  </div>
+
+  <template id="postTemplate">
+    <article class="card">
+      <img alt="cover" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:none" class="cover">
+      <h3 class="title"></h3>
+      <div class="meta small" style="font-size:13px;margin-bottom:6px"></div>
+      <p class="excerpt"></p>
+      <div class="tags" style="margin-top:8px"></div>
+      <a class="btn" style="margin-top:10px;display:inline-block" href="#" data-role="read">Read</a>
+    </article>
+  </template>
+
+  <!-- Posts and projects are simple JS objects for this static starter. Replace with markdown loader or a static-site generator later. -->
+  <script>
+    // --- sample content ---
+    const posts = [
+      {
+        id: 'Lorem',
+        title: 'Lorem ipsum dolor',
+        date: '2025-10-02',
+        tags: ['intro','product'],
+        excerpt: "Lorem ipsum dolor sit amet consectetur adipiscing elit",
+        content: `<p>This is the first post. I plan to write about product thinking, prototyping, and what I learn in internships.</p>`
+      },
+      {
+        id: 'Ipsum',
+        title: 'Lorem ipsum dolor',
+        date: '2025-09-15',
+        tags: ['project','engineering'],
+        excerpt: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+        content: `<p>In id cursus mi pretium tellus duis convallis</p>`
+      }
+    ];
+
+    const projects = [
+      {id:'Lorem ipsum', title:'Quisque faucibus ex sapien', desc:'Tempus leo eu aenean sed diam urna tempor', link:'#'},
+      {id:'Lorem ipsum', title:' Quisque faucibus ex sapien', desc:'Tempus leo eu aenean sed diam urna tempor', link:'#'}
+    ];
+
+    // --- rendering logic ---
+    const postsGrid = document.getElementById('postsGrid');
+    const projectsGrid = document.getElementById('projectsGrid');
+    const postTemplate = document.getElementById('postTemplate').content;
+
+    function renderPosts(list){
+      postsGrid.innerHTML='';
+      if(list.length===0){ postsGrid.innerHTML = '<p class="meta">No posts found. Add posts to the `posts` array in the JS to show them here.</p>'; return }
+      list.forEach(p=>{
+        const clone = document.importNode(postTemplate,true);
+        const title = clone.querySelector('.title');
+        const meta = clone.querySelector('.meta');
+        const excerpt = clone.querySelector('.excerpt');
+        const tagsEl = clone.querySelector('.tags');
+        const cover = clone.querySelector('.cover');
+        title.textContent = p.title;
+        meta.textContent = `${new Date(p.date).toLocaleDateString()} • ${p.tags.join(', ')}`;
+        excerpt.innerHTML = p.excerpt;
+        if(p.cover){ cover.src = p.cover; cover.style.display='block' }
+        p.tags.forEach(t=>{ const el = document.createElement('span'); el.className='tag'; el.textContent=t; tagsEl.appendChild(el) })
+        const readBtn = clone.querySelector('[data-role="read"]');
+        readBtn.href = `#post-${p.id}`;
+        readBtn.addEventListener('click', (e)=>{ e.preventDefault(); openPostModal(p) });
+        postsGrid.appendChild(clone);
+      })
+    }
+
+    function renderProjects(){
+      projectsGrid.innerHTML='';
+      projects.forEach(p=>{
+        const el = document.createElement('div'); el.className='card';
+        el.innerHTML = `<h3>${p.title}</h3><p style="color:var(--muted)">${p.desc}</p><a class='btn' href='${p.link}'>View</a>`;
+        projectsGrid.appendChild(el);
+      })
+    }
+
+    // search + filter
+    const searchInput = document.getElementById('search');
+    const tagInput = document.getElementById('tagFilter');
+    const clearBtn = document.getElementById('clearFilters');
+
+    function filterAndRender(){
+      const q = searchInput.value.trim().toLowerCase();
+      const tag = tagInput.value.trim().toLowerCase();
+      const filtered = posts.filter(p=>{
+        const inTitle = p.title.toLowerCase().includes(q);
+        const inExcerpt = p.excerpt.toLowerCase().includes(q);
+        const inTags = p.tags.join(' ').toLowerCase().includes(q);
+        const matchesQ = q === '' ? true : (inTitle||inExcerpt||inTags);
+        const matchesTag = tag === '' ? true : p.tags.map(t=>t.toLowerCase()).includes(tag);
+        return matchesQ && matchesTag;
+      })
+      renderPosts(filtered);
+    }
+
+    searchInput.addEventListener('input', filterAndRender);
+    tagInput.addEventListener('input', filterAndRender);
+    clearBtn.addEventListener('click', ()=>{ searchInput.value=''; tagInput.value=''; filterAndRender(); });
+
+    // theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', ()=>{
+      const body = document.body; const next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', next);
+      localStorage.setItem('site-theme', next);
+    });
+    // persist theme
+    const savedTheme = localStorage.getItem('site-theme'); if(savedTheme) document.body.setAttribute('data-theme', savedTheme);
+
+    // modal-ish post viewer (very simple)
+    function openPostModal(post){
+      const modal = document.createElement('div');
+      modal.style.position='fixed';modal.style.inset=0;modal.style.display='flex';modal.style.alignItems='center';modal.style.justifyContent='center';modal.style.background='rgba(0,0,0,0.5)';
+      const inner = document.createElement('div'); inner.style.maxWidth='820px'; inner.style.width='92%'; inner.style.maxHeight='86%'; inner.style.overflow='auto'; inner.style.borderRadius='12px'; inner.style.padding='22px'; inner.style.background='var(--card)';
+      inner.innerHTML = `<h2>${post.title}</h2><div style="color:var(--muted);margin-bottom:12px">${new Date(post.date).toLocaleDateString()} • ${post.tags.join(', ')}</div>${post.content}<div style="margin-top:18px"><button class='btn' id='closeModal'>Close</button></div>`;
+      modal.appendChild(inner);
+      document.body.appendChild(modal);
+      modal.querySelector('#closeModal').addEventListener('click', ()=>document.body.removeChild(modal));
+      modal.addEventListener('click', (e)=>{ if(e.target===modal) document.body.removeChild(modal) });
+    }
+
+    // initial render
+    renderPosts(posts);
+    renderProjects();
+
+    // optional: enable direct linking to post via #post-id
+    function checkHash(){ if(location.hash.startsWith('#post-')){ const id = location.hash.replace('#post-',''); const p = posts.find(x=>x.id===id); if(p) openPostModal(p) } }
+    window.addEventListener('hashchange', checkHash); checkHash();
+
+  </script>
+</body>
+</html>
